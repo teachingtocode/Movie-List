@@ -1,6 +1,8 @@
+package main.java;
+
 import java.util.ArrayList;
 import java.util.Scanner;
-class Movies {
+public class Movies {
 
 
     private int size = 0;
@@ -11,28 +13,31 @@ class Movies {
     private ArrayList <Movie> movieList = new ArrayList<>();
 
     void fillArray() {
-        movieList.add(new Movie("Avengers","Robert Downey Jr", "2012", "Action"));
+        final String ACTION = "Action";
+        final String CRIME = "CRIME";
+        final String DRAMA = "DRAMA";
+        movieList.add(new Movie("Avengers","Robert Downey Jr", "2012", ACTION));
         movieList.add(new Movie("Incredibles","Craig Nelson","2004","Animation"));
-        movieList.add(new Movie("Godfather","Al Pacino","1972","Crime"));
-        movieList.add(new Movie("Inception","Leonardo DiCaprio","2010","Action"));
-        movieList.add(new Movie("Matrix","Keanu Reeves", "1999","Action"));
-        movieList.add(new Movie("Interstellar","Matthew McConaughey", "2014","Drama"));
+        movieList.add(new Movie("Godfather","Al Pacino","1972", CRIME));
+        movieList.add(new Movie("Inception","Leonardo DiCaprio","2010", ACTION));
+        movieList.add(new Movie("Matrix","Keanu Reeves", "1999", ACTION));
+        movieList.add(new Movie("Interstellar","Matthew McConaughey", "2014", DRAMA));
         movieList.add(new Movie("Se7en","Brad Pitt", "1995","Crime"));
-        movieList.add(new Movie("Prestige","Christian Bale", "2006","Drama"));
-        movieList.add(new Movie("Departed","Leonardo DiCaprio", "2006","Crime"));
-        movieList.add(new Movie("Memento","Guy Pierce", "2000","Drama"));
-        movieList.add(new Movie("Pianist","Adrien Brody", "2002","Drama"));
-        movieList.add(new Movie("Gladiator","Russel Crowe", "2000","Action"));
-        movieList.add(new Movie("Terminator","Arnold Schwarzenegger", "1984","Action"));
-        movieList.add(new Movie("Superman","Christopher Reeve", "1978","Action"));
+        movieList.add(new Movie("Prestige","Christian Bale", "2006", DRAMA));
+        movieList.add(new Movie("Departed","Leonardo DiCaprio", "2006", CRIME));
+        movieList.add(new Movie("Memento","Guy Pierce", "2000", DRAMA));
+        movieList.add(new Movie("Pianist","Adrien Brody", "2002", DRAMA));
+        movieList.add(new Movie("Gladiator","Russel Crowe", "2000", ACTION));
+        movieList.add(new Movie("Terminator","Arnold Schwarzenegger", "1984", ACTION));
+        movieList.add(new Movie("Superman","Christopher Reeve", "1978", ACTION));
         movieList.add(new Movie("Alien","Sigourney Weaver", "1978","Horror"));
-        movieList.add(new Movie("Braveheart","Mel Gibson", "1995","Action"));
-        movieList.add(new Movie("Scarface","Al Pacino", "1983","Crime"));
+        movieList.add(new Movie("Braveheart","Mel Gibson", "1995", ACTION));
+        movieList.add(new Movie("Scarface","Al Pacino", "1983", CRIME));
         size = 17;
 
     }
 
-    void addMovies() {
+     void addMovies() {
 
         System.out.println("Title:");
         String newTitle = stdIn.nextLine();
@@ -45,7 +50,7 @@ class Movies {
         addMovies(newTitle, newActor, newYear, newGenre);
     }
 
-    private void addMovies(Movie newMovie){
+    public void addMovies(Movie newMovie){
         movieList.add(newMovie);
         size++;
     }
@@ -70,7 +75,7 @@ class Movies {
         boolean movieFound = false;
         for (int i = 0; i < size; i++) {
             Movie currentMovie = getMovieList().get(i);
-            if (currentMovie.getTitle().toLowerCase().equals(titleSearch)) {
+            if (currentMovie.getTitle().equalsIgnoreCase(titleSearch)) {
                 movieFound = true;
                 foundMovies.addMovies(currentMovie.getTitle(), currentMovie.getActor(), currentMovie.getYear(),
                         currentMovie.getGenre());
@@ -85,7 +90,7 @@ class Movies {
         boolean movieFound = false;
         for (int i = 0; i < size; i++) {
             Movie currentMovie = getMovieList().get(i);
-            if (currentMovie.getActor().toLowerCase().equals(actorSearch)) {
+            if (currentMovie.getActor().equalsIgnoreCase(actorSearch)) {
                 movieFound = true;
                 foundMovies.addMovies(currentMovie.getTitle(), currentMovie.getActor(), currentMovie.getYear(),
                         currentMovie.getGenre());
@@ -101,7 +106,7 @@ class Movies {
         boolean movieFound = false;
         for (int i = 0; i < size; i++) {
             Movie currentMovie = getMovieList().get(i);
-            if (currentMovie.getYear().toLowerCase().equals(yearSearch)) {
+            if (currentMovie.getYear().equalsIgnoreCase(yearSearch)) {
                 movieFound = true;
                 foundMovies.addMovies(currentMovie.getTitle(), currentMovie.getActor(), currentMovie.getYear(),
                         currentMovie.getGenre());
@@ -116,7 +121,7 @@ class Movies {
         boolean movieFound = false;
         for (int i = 0; i < size; i++) {
             Movie currentMovie = getMovieList().get(i);
-            if (currentMovie.getGenre().toLowerCase().equals(genreSearch)) {
+            if (currentMovie.getGenre().equalsIgnoreCase(genreSearch)) {
                 movieFound = true;
                 foundMovies.addMovies(currentMovie.getTitle(), currentMovie.getActor(), currentMovie.getYear(),
                         currentMovie.getGenre());
@@ -192,7 +197,8 @@ class Movies {
     }
     private void bubbleSort(ArrayList<Movie> arr, int n)
     {
-        int i, j;
+        int i;
+        int j;
         for (i = 0; i < n-1; i++)
 
 

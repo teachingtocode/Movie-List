@@ -1,3 +1,5 @@
+package main.java;
+
 public class Movie implements Comparable<Movie> {
 
     private String title;
@@ -40,5 +42,14 @@ public class Movie implements Comparable<Movie> {
     @Override
     public int compareTo(Movie o) {
         return this.getTitle().compareToIgnoreCase(o.getTitle());
+    }
+
+    @Override
+    public int hashCode(){
+        int hash = 7;
+        for (int i = 0; i < getTitle().length(); i++) {
+            hash = hash*31 + getTitle().charAt(i);
+        }
+        return hash;
     }
 }

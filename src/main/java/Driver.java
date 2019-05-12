@@ -1,14 +1,46 @@
 
 // PASSWORD: 123456  ENCRYPTED  3 ATTEMPTS
+package main.java;
+
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
+import java.util.logging.*;
 
 
 public class Driver {
     private static boolean isValid;
-    public static void main(String[] args) {
+    private static final String QUICKSORTTEXT = "1. Quick Sort\\n";
+    private static final String BUBBLESORTTEXT = "2. Bubble Sort\\n";
+    private static final String LISTSORT = "List sorted in ";
+    private static final String NANOSECONDS = " nano seconds.";
+    private static final Logger LOGGER = Logger.getLogger(Driver.class.getName());
+    public static void main(String[] args) throws MyOwnNoSuchAlgorithm{
+        LOGGER.info("Logger Name: " + LOGGER.getName());
+        Handler consoleHandler;
+        Handler fileHandler;
+        try {
+            consoleHandler = new ConsoleHandler();
+            fileHandler = new FileHandler("./movieList.log");
+
+            LOGGER.addHandler(consoleHandler);
+            LOGGER.addHandler(fileHandler);
+
+            consoleHandler.setLevel(Level.ALL);
+            fileHandler.setLevel(Level.ALL);
+            LOGGER.setLevel(Level.ALL);
+
+            LOGGER.log(Level.CONFIG, "Configuration done.");
+
+            LOGGER.removeHandler(consoleHandler);
+
+            LOGGER.log(Level.FINE, "Finer logged");
+        }
+        catch(IOException exception){
+            LOGGER.log(Level.SEVERE, "Error occur in FileHandler.", exception);
+        }
         Scanner stdIn = new Scanner(System.in);
         Movies movies = new Movies();
         String username;
@@ -46,8 +78,8 @@ do {
         if (foundMovies.getSize() != 0) {
             int sortChoice;
 
-            System.out.println("1. Quick Sort\n" +
-                    "2. Bubble Sort");
+            System.out.println(QUICKSORTTEXT +
+                    BUBBLESORTTEXT );
             sortChoice = 0;
             isValid = false;
             sortChoice = getSortChoice(stdIn, sortChoice);
@@ -66,14 +98,11 @@ do {
                 }
                 isValid = true;
             }
-            if (sortChoice == 1) {
+            if (sortChoice == 1)
                 System.out.println(foundMovies.toString());
-                System.out.println("List sorted in " + time + " nano seconds.");
-            } else {
+            else
                 System.out.println(foundMovies.reverseMovies().toString());
-                System.out.println("List sorted in " + time + " nano seconds.");
-
-            }
+            System.out.println(LISTSORT + time + NANOSECONDS);
         }
     }
 
@@ -93,9 +122,10 @@ do {
         return sortChoice;
     }
 
-    private static String encryptPassword(String input)
-    {
+    private static String encryptPassword(String input) throws MyOwnNoSuchAlgorithm {
         try {
+            LOGGER.log(Level.WARNING, "Can cause NoSuchAlgorithmException");
+            LOGGER.log(Level.CONFIG,"String is set to SHA-512");
             MessageDigest md = MessageDigest.getInstance("SHA-512");
 
             byte[] messageDigest = md.digest(input.getBytes());
@@ -110,13 +140,13 @@ do {
 
             return hashText.toString();
         }
-
         catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new MyOwnNoSuchAlgorithm("No such algorithm such as SHA-512", e);
         }
     }
-    private static void userCaseA(Scanner stdIn, String password, Movies movies){
-        for (int i = 0; i < 3; i++) {
+    private static void userCaseA(Scanner stdIn, String password, Movies movies) throws MyOwnNoSuchAlgorithm {
+        int i = 0;
+        while (i < 3) {
             System.out.println("Enter Password");
             String typedPassword = stdIn.next();
 
@@ -162,14 +192,14 @@ do {
                         break;
 
                     case 5:
-                        System.out.println("1. Quick Sort\n" +
-                                "2. Bubble Sort");
+                        System.out.println(QUICKSORTTEXT +
+                                BUBBLESORTTEXT);
                         int sortChoice = 0;
                         isValid = false;
                         sortChoice = getSortChoice(stdIn, sortChoice);
                         long time = movies.sortMovies(sortChoice);
                         System.out.println(movies.toString());
-                        System.out.println("List sorted in " + time + " nano seconds.");
+                        System.out.println(LISTSORT + time + NANOSECONDS);
 
                         break;
                     case 6:
@@ -177,11 +207,12 @@ do {
                         break;
                     default:
                         System.out.println("Invalid selection.");
-
-
                 }
-            } else {
+
+            }
+            else {
                 System.out.println("Invalid Password! " + (2 - i) + " attempt(s) remaining.");
+                i++;
             }
         }
     }
@@ -214,14 +245,14 @@ do {
                 break;
 
             case 3:
-                System.out.println("1. Quick Sort\n" +
-                        "2. Bubble Sort");
+                System.out.println(QUICKSORTTEXT +
+                        BUBBLESORTTEXT);
                 int sortChoice = 0;
                 isValid = false;
                 sortChoice = getSortChoice(stdIn, sortChoice);
                 long time = movies.sortMovies(sortChoice);
                 System.out.println(movies.toString());
-                System.out.println("List sorted in " + time + " nano seconds.");
+                System.out.println(LISTSORT+ time + NANOSECONDS);
 
                 break;
             case 4:
@@ -273,5 +304,12 @@ do {
             foundMovies = movies.searchMoviesByGenre(genreSearch);
             sortFound(stdIn, foundMovies);
         }
+    }
+
+    private static class MyOwnNoSuchAlgorithm extends Throwable {
+        MyOwnNoSuchAlgorithm(String message, Throwable e) {
+            LOGGER.log(Level.SEVERE, message, e);
+        }
+
     }
 }
