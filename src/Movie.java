@@ -25,10 +25,20 @@ public class Movie implements Comparable<Movie> {
 
     String getGenre() { return genre; }
 
-    public int compareTo(Movie anotherMovie) {
-        return this.getTitle().compareToIgnoreCase(anotherMovie.getTitle());
+    @Override
+    public boolean equals(Object o){
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Movie other = (Movie)o;
+        return this.getTitle().compareToIgnoreCase(other.getTitle()) != 0;
     }
-    public boolean equals(Movie anotherMovie){
-        return compareTo(anotherMovie) == 0;
+
+    @Override
+    public int compareTo(Movie o) {
+        return this.getTitle().compareToIgnoreCase(o.getTitle());
     }
 }
