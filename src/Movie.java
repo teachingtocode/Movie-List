@@ -27,7 +27,8 @@ public class Movie implements Comparable<Movie> {
 
     public int compareTo(Movie anotherMovie) {
         return this.getTitle().compareToIgnoreCase(anotherMovie.getTitle());
-
-
+    }
+    public boolean equals(Movie anotherMovie){
+        return compareTo(anotherMovie) == 0;
     }
 }
