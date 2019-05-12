@@ -12,20 +12,9 @@ public class Driver {
         Scanner stdIn = new Scanner(System.in);
         Movies movies = new Movies();
         String username;
-        String typedPassword;
         String password = encryptPassword("123456");
-        String titleSearch;
-        String actorSearch;
-        String yearSearch;
-        String genreSearch;
-        int searchType = 0;
-        int sortChoice;
-        int deleteMovie;
-        int searchChoice;
-        int guestChoice = 0;
         boolean tryAgain = true;
         movies.fillArray();
-        // movies.addMovies();
 
 do {
         System.out.println("Main Menu.\n Enter A for admin, C for customer or Q to quit.");
@@ -36,200 +25,10 @@ do {
                 switch (username) {
 
                     case "a":
-                        for (int i = 0; i < 3; i++) {
-                            System.out.println("Enter Password");
-                            typedPassword = stdIn.next();
-
-                            if (encryptPassword(typedPassword).equals(password)) {
-
-                                System.out.println("1. Display All");
-                                System.out.println("2. Search");
-                                System.out.println("3. Add Movies");
-                                System.out.println("4. Remove Movies");
-                                System.out.println("5. Sort");
-                                System.out.println("6. Main Menu");
-
-                                while (!stdIn.hasNextInt()) {
-                                    System.out.println("Invalid Entry. Select either from one of the above options.");
-                                    stdIn.next();
-                                }
-                                searchChoice = stdIn.nextInt();
-
-                                switch (searchChoice) {
-
-                                    case 1:
-                                        System.out.println(movies.toString());
-                                        break;
-
-                                    case 2:
-                                        System.out.println("Search by::\n 1. Title\n 2.Lead Actor/Actress\n 3.Release Year\n 4. Genre");
-                                        isValid = false;
-                                        while(!isValid) {
-                                            while (!stdIn.hasNextInt()) {
-                                                System.out.println("Valid number not entered. Enter 1, 2, or 3.");
-                                                stdIn.next();
-                                            }
-                                            searchType = stdIn.nextInt();
-                                            if (searchType != 1 && searchType != 2 && searchType !=3 && searchType != 4) {
-                                                System.out.println("Please select either 1, 2, or 3.");
-                                                continue;
-                                            }
-                                            isValid = true;
-                                        }
-                                        stdIn.nextLine();
-                                        Movies foundMovies;
-                                        if (searchType==1) {
-                                            System.out.println("Please enter a movie title to search for.");
-                                            titleSearch = stdIn.nextLine().toLowerCase();
-                                            foundMovies = movies.searchMoviesByTitle(titleSearch);
-                                            SortFound(stdIn, foundMovies);
-
-                                        }
-                                        else if (searchType==2){
-                                            System.out.println("Please enter an actor or actress to search for");
-                                            actorSearch = stdIn.nextLine().toLowerCase();
-                                            foundMovies = movies.searchMoviesByActor(actorSearch);
-                                            SortFound(stdIn, foundMovies);
-                                        }
-                                        else if (searchType==3){
-                                            System.out.println("Please enter a release year to search.");
-                                            yearSearch = stdIn.next().toLowerCase();
-                                            foundMovies = movies.searchMoviesByYear(yearSearch);
-                                            SortFound(stdIn, foundMovies);
-                                        }
-                                        else{
-                                            System.out.println("Please enter a genre to search for.");
-                                            genreSearch = stdIn.next();
-                                            foundMovies = movies.searchMoviesByGenre(genreSearch);
-                                            SortFound(stdIn, foundMovies);
-                                        }
-                                        break;
-
-
-                                    case 3:
-                                        movies.addMovies();
-                                        System.out.println("Updated List");
-                                        System.out.println(movies.toString());
-                                        break;
-
-                                    case 4:
-
-                                        System.out.println("Select number associated with movie to be removed");
-                                        deleteMovie = stdIn.nextInt();
-                                        movies.getMovieList().remove(deleteMovie - 1);
-                                        System.out.println("Updated List:");
-                                        System.out.println(movies.toString());
-                                        break;
-
-                                    case 5:
-                                        System.out.println("1. Quick Sort\n" +
-                                                "2. Bubble Sort");
-                                        sortChoice = 0;
-                                        isValid = false;
-                                        sortChoice = getSortChoice(stdIn, sortChoice);
-                                        long time = movies.sortMovies(sortChoice);
-                                        System.out.println(movies.toString());
-                                        System.out.println("List sorted in " + time + " nano seconds.");
-
-                                        break;
-                                    case 6:
-                                        i = 3;
-                                        break;
-                                    default:
-                                        System.out.println("Invalid selection.");
-
-
-                                }
-                            } else {
-                                System.out.println("Invalid Password! " + (2 - i) + " attempt(s) remaining.");
-                            }
-                        }
+                        userCaseA(stdIn, password, movies);
                         break;
                     case "c":
-
-
-                        System.out.println("1. Display All");
-                        System.out.println("2. Search");
-                        System.out.println("3. Sort");
-                        System.out.println("4. Main Menu");
-                        isValid=false;
-                        while(!isValid) {
-                            while (!stdIn.hasNextInt()) {
-                                System.out.println("Number not entered. Enter 1, 2, 3, or 4");
-                                stdIn.next();
-                            }
-                            guestChoice = stdIn.nextInt();
-                            if (guestChoice != 1 && guestChoice != 2 && guestChoice !=3 && guestChoice != 4) {
-                                System.out.println("Select either 1, 2, 3, or 4");
-                                continue;
-                            }
-                            isValid = true;
-                        }
-                        switch (guestChoice) {
-                            case 1:
-                                System.out.println(movies.toString());
-                                break;
-
-                            case 2:
-                                System.out.println("Search by::\n 1. Title\n 2.Lead Actor/Actress\n 3.Release Year\n 4. Genre");
-                                isValid = false;
-                                while(!isValid) {
-                                    while (!stdIn.hasNextInt()) {
-                                        System.out.println("Number not entered. Enter 1, 2, or 3.");
-                                        stdIn.next();
-                                    }
-                                    searchType = stdIn.nextInt();
-                                    if (searchType != 1 && searchType != 2 && searchType !=3 && searchType != 4) {
-                                        System.out.println("Select either 1, 2, or 3.");
-                                        continue;
-                                    }
-                                    isValid = true;
-                                }
-                                stdIn.nextLine();
-                                Movies foundMovies;
-                                if (searchType==1) {
-                                    System.out.println("Enter a movie title to search for.");
-                                    titleSearch = stdIn.nextLine().toLowerCase();
-                                    foundMovies = movies.searchMoviesByTitle(titleSearch);
-                                    SortFound(stdIn, foundMovies);
-
-                                }
-                                else if (searchType==2){
-                                    System.out.println("Enter an actor or actress to search for");
-                                    actorSearch = stdIn.nextLine().toLowerCase();
-                                    foundMovies = movies.searchMoviesByActor(actorSearch);
-                                    SortFound(stdIn, foundMovies);
-                                }
-                                else if (searchType==3){
-                                    System.out.println("Enter a release year to search.");
-                                    yearSearch = stdIn.next().toLowerCase();
-                                    foundMovies = movies.searchMoviesByYear(yearSearch);
-                                    SortFound(stdIn, foundMovies);
-                                }
-                                else{
-                                    System.out.println("Enter a genre to search for.");
-                                    genreSearch = stdIn.next();
-                                    foundMovies = movies.searchMoviesByGenre(genreSearch);
-                                    SortFound(stdIn, foundMovies);
-                                }
-                                break;
-
-                            case 3:
-                                System.out.println("1. Quick Sort\n" +
-                                        "2. Bubble Sort");
-                                sortChoice = 0;
-                                isValid = false;
-                                sortChoice = getSortChoice(stdIn, sortChoice);
-                                long time = movies.sortMovies(sortChoice);
-                                System.out.println(movies.toString());
-                                System.out.println("List sorted in " + time + " nano seconds.");
-
-                                break;
-                            case 4:
-                                break;
-                            default:
-                                System.out.println("Invalid Entry");
-                        }
+                        userCaseC(stdIn, movies);
                         break;
                     default:
                         System.out.println("Entry invalid.");
@@ -243,7 +42,7 @@ do {
         } } while (tryAgain);
     }
 
-    private static void SortFound(Scanner stdIn, Movies foundMovies) {
+    private static void sortFound(Scanner stdIn, Movies foundMovies) {
         if (foundMovies.getSize() != 0) {
             int sortChoice;
 
@@ -314,6 +113,165 @@ do {
 
         catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
+        }
+    }
+    private static void userCaseA(Scanner stdIn, String password, Movies movies){
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Enter Password");
+            String typedPassword = stdIn.next();
+
+            if (encryptPassword(typedPassword).equals(password)) {
+
+                System.out.println("1. Display All");
+                System.out.println("2. Search");
+                System.out.println("3. Add Movies");
+                System.out.println("4. Remove Movies");
+                System.out.println("5. Sort");
+                System.out.println("6. Main Menu");
+
+                while (!stdIn.hasNextInt()) {
+                    System.out.println("Invalid Entry. Select either from one of the above options.");
+                    stdIn.next();
+                }
+                int searchChoice = stdIn.nextInt();
+
+                switch (searchChoice) {
+
+                    case 1:
+                        System.out.println(movies.toString());
+                        break;
+
+                    case 2:
+                        case2(stdIn, movies);
+                        break;
+
+
+                    case 3:
+                        movies.addMovies();
+                        System.out.println("Updated List");
+                        System.out.println(movies.toString());
+                        break;
+
+                    case 4:
+
+                        System.out.println("Select number associated with movie to be removed");
+                        int deleteMovie = stdIn.nextInt();
+                        movies.getMovieList().remove(deleteMovie - 1);
+                        System.out.println("Updated List:");
+                        System.out.println(movies.toString());
+                        break;
+
+                    case 5:
+                        System.out.println("1. Quick Sort\n" +
+                                "2. Bubble Sort");
+                        int sortChoice = 0;
+                        isValid = false;
+                        sortChoice = getSortChoice(stdIn, sortChoice);
+                        long time = movies.sortMovies(sortChoice);
+                        System.out.println(movies.toString());
+                        System.out.println("List sorted in " + time + " nano seconds.");
+
+                        break;
+                    case 6:
+                        i = 3;
+                        break;
+                    default:
+                        System.out.println("Invalid selection.");
+
+
+                }
+            } else {
+                System.out.println("Invalid Password! " + (2 - i) + " attempt(s) remaining.");
+            }
+        }
+    }
+    private static void userCaseC(Scanner stdIn, Movies movies){
+        System.out.println("1. Display All");
+        System.out.println("2. Search");
+        System.out.println("3. Sort");
+        System.out.println("4. Main Menu");
+        isValid=false;
+        int guestChoice = 0;
+        while(!isValid) {
+            while (!stdIn.hasNextInt()) {
+                System.out.println("Number not entered. Enter 1, 2, 3, or 4");
+                stdIn.next();
+            }
+            guestChoice = stdIn.nextInt();
+            if (guestChoice != 1 && guestChoice != 2 && guestChoice !=3 && guestChoice != 4) {
+                System.out.println("Select either 1, 2, 3, or 4");
+                continue;
+            }
+            isValid = true;
+        }
+        switch (guestChoice) {
+            case 1:
+                System.out.println(movies.toString());
+                break;
+
+            case 2:
+                case2(stdIn, movies);
+                break;
+
+            case 3:
+                System.out.println("1. Quick Sort\n" +
+                        "2. Bubble Sort");
+                int sortChoice = 0;
+                isValid = false;
+                sortChoice = getSortChoice(stdIn, sortChoice);
+                long time = movies.sortMovies(sortChoice);
+                System.out.println(movies.toString());
+                System.out.println("List sorted in " + time + " nano seconds.");
+
+                break;
+            case 4:
+                break;
+            default:
+                System.out.println("Invalid Entry");
+        }
+    }
+    private static void case2(Scanner stdIn, Movies movies){
+        System.out.println("Search by::\n 1. Title\n 2.Lead Actor/Actress\n 3.Release Year\n 4. Genre");
+        isValid = false;
+        int searchType = 0;
+        while(!isValid) {
+            while (!stdIn.hasNextInt()) {
+                System.out.println("Number not entered. Enter 1, 2, or 3.");
+                stdIn.next();
+            }
+            searchType = stdIn.nextInt();
+            if (searchType != 1 && searchType != 2 && searchType !=3 && searchType != 4) {
+                System.out.println("Select either 1, 2, or 3.");
+                continue;
+            }
+            isValid = true;
+        }
+        stdIn.nextLine();
+        Movies foundMovies;
+        if (searchType==1) {
+            System.out.println("Enter a movie title to search for.");
+            String titleSearch = stdIn.nextLine().toLowerCase();
+            foundMovies = movies.searchMoviesByTitle(titleSearch);
+            sortFound(stdIn, foundMovies);
+
+        }
+        else if (searchType==2){
+            System.out.println("Enter an actor or actress to search for");
+            String actorSearch = stdIn.nextLine().toLowerCase();
+            foundMovies = movies.searchMoviesByActor(actorSearch);
+            sortFound(stdIn, foundMovies);
+        }
+        else if (searchType==3){
+            System.out.println("Enter a release year to search.");
+            String yearSearch = stdIn.next().toLowerCase();
+            foundMovies = movies.searchMoviesByYear(yearSearch);
+            sortFound(stdIn, foundMovies);
+        }
+        else{
+            System.out.println("Enter a genre to search for.");
+            String genreSearch = stdIn.next();
+            foundMovies = movies.searchMoviesByGenre(genreSearch);
+            sortFound(stdIn, foundMovies);
         }
     }
 }
